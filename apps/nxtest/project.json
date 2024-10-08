@@ -83,6 +83,55 @@
         "staticFilePath": "dist/apps/nxtest/browser",
         "spa": true
       }
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/nxtest/.storybook",
+        "browserTarget": "nxtest:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/nxtest",
+        "configDir": "apps/nxtest/.storybook",
+        "browserTarget": "nxtest:build",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c apps/nxtest/.storybook --url=http://localhost:4400"
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "dependsOn": ["build-storybook"],
+      "options": {
+        "buildTarget": "nxtest:build-storybook",
+        "staticFilePath": "dist/storybook/nxtest",
+        "spa": true
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "nxtest:build-storybook:ci"
+        }
+      }
     }
   }
 }
